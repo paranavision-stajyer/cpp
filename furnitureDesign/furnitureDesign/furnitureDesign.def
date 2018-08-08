@@ -1,0 +1,11 @@
+LIBRARY	furnitureDesign
+EXPORTS
+	getAssyNames @1
+	getAssyXML @2
+	deleteAssy @3
+	addAssy @4
+	updatePart @5
+	deletePart @6
+	addPart @7
+	addJoin @8
+	foo @9
