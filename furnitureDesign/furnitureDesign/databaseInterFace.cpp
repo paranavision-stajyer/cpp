@@ -636,7 +636,7 @@ void databaseInterFace::deletePanel(int panelId){
 }
 void databaseInterFace::addJoin(int joiningPanelId, int joinedPanelId, int * joiningFaces, int * joinedFaces, float * distances){
 	try {
-		databaseInterFace::deleteJoin(joiningPanelId);
+		databaseInterFace::deleteJoin(joiningPanelId, joinedPanelId);
 		sql::Driver *driver;
 		sql::Connection *con;
 		sql::PreparedStatement  *prep_stmt;
@@ -669,7 +669,7 @@ void databaseInterFace::addJoin(int joiningPanelId, int joinedPanelId, int * joi
 		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
 	}
 }
-void databaseInterFace::deleteJoin(int joiningPanelId){
+void databaseInterFace::deleteJoin(int joiningPanelId, int joinedPanelId){
 	try {
 		sql::Driver *driver;
 		sql::Connection *con;
@@ -680,9 +680,10 @@ void databaseInterFace::deleteJoin(int joiningPanelId){
 		con = driver->connect(host, user, password);
 		/* Connect to the MySQL test database */
 		con->setSchema(db);
-		prep_stmt = con->prepareStatement("DELETE FROM Joins WHERE joiningPanel=?");
+		prep_stmt = con->prepareStatement("DELETE FROM Joins WHERE joiningPanel=? AND  joinedPanel=?");
 		//set variable
-		prep_stmt->setInt(1, joiningPanelId);
+		prep_stmt->setInt(0, joiningPanelId);
+		prep_stmt->setInt(1, joinedPanelId);
 		prep_stmt->execute();
 		con->commit();
 

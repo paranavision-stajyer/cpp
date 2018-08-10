@@ -9,3 +9,4 @@ EXPORTS
 	addPart @7
 	addJoin @8
 	foo @9
+	deleteJoin @10

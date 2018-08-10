@@ -38,7 +38,7 @@ namespace furniture
 		static Panel* getPanel(int panelId);
 		static void deletePanel(int panelId);
 		static void addJoin(int joiningPanelId, int joinedPanelId, int* joiningFaces, int* joinedFaces, float* distances);
-		static void deleteJoin(int joiningPanelId);
+		static void deleteJoin(int joiningPanelId, int joinedPanelId);
 		static bool isAssyExist(int assyId);
 		static bool getJoinProperties(int joiningPanel, int& joinedPanel, int* joiningFaces, int* joinedFaces, float* distances);
 	};

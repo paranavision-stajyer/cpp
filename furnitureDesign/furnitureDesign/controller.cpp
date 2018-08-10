@@ -82,13 +82,20 @@ bool controller::addPart(int userId, std::string assyName, std::string partName)
 		return false;
 }
 
-bool controller::addJoin(int userId, std::string assyName, std::string joiningPart, std::string joinedPart, std::string joiningFaces, std::string joinedFaces, std::string distances)
+bool controller::addJoin(int userId,
+						 std::string assyName, 
+						 std::string joiningPart,
+						 std::string joinedPart, 
+						 std::string joiningFaces,
+						 std::string joinedFaces, 
+						 std::string distances)
 {
 	int assyid=databaseInterFace::getAssemblyId(userId, assyName);
 	if (assyid == 0)
 		return false;
 	int joiningid=databaseInterFace::getPartId(assyid, joiningPart);
 	if (joiningid == 0)
+
 		return false;
 	int joinedid = databaseInterFace::getPartId(assyid, joinedPart);
 	if (joinedid == 0)
@@ -107,6 +114,23 @@ bool controller::addJoin(int userId, std::string assyName, std::string joiningPa
 		return true;
 	}
 }
+
+bool controller::deleteJoin(int userId, std::string assyName, std::string joinedPanel, std::string joiningPanel)
+{
+	int assyid = databaseInterFace::getAssemblyId(userId, assyName);
+	if (assyid == 0)
+		return false;
+	int joiningpartid = databaseInterFace::getPartId(assyid, joiningPanel);
+	if (joiningpartid == 0)
+		return false;
+	int joinedpartid = databaseInterFace::getPartId(assyid, joinedPanel);
+	if (joinedpartid == 0)
+		return false;
+	//databaseInterFace::deletePanelFromAssembly(assyid, partid);
+	databaseInterFace::deleteJoin(joiningpartid, joinedpartid);
+	return true;
+}
+
 
 void controller::deleteAssy(int userId, std::string assyName)
 {

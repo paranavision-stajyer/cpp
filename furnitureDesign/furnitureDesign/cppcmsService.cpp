@@ -139,3 +139,12 @@ void cppcmsService::addJoin(std::string userId, std::string assyName, std::strin
 	response().out() << furniture::controller::getAssyXML(std::stoi(userId), assyName.data());
 }
 
+
+void cppcmsService::deleteJoin(std::string userId, std::string assyName, std::string joiningPart, std::string joinedPart)
+{
+	response().set_header("Access-Control-Allow-Origin", "*");
+	response().set_header("Access-Control-Allow-Headers", "Content-Type");
+		
+	furniture::controller::deleteJoin(std::stoi(userId), assyName, joiningPart, joinedPart);
+	response().out() << furniture::controller::getAssyXML(std::stoi(userId), assyName.data());
+}
