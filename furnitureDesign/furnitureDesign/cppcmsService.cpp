@@ -148,3 +148,30 @@ void cppcmsService::deleteJoin(std::string userId, std::string assyName, std::st
 	furniture::controller::deleteJoin(std::stoi(userId), assyName, joiningPart, joinedPart);
 	response().out() << furniture::controller::getAssyXML(std::stoi(userId), assyName.data());
 }
+
+/*Cagri*/
+void cppcmsService::updateJoin(std::string userId, std::string assyName, std::string joiningPart, std::string joinedPart, std::string properties)
+{
+	response().set_header("Access-Control-Allow-Origin", "*");
+	response().set_header("Access-Control-Allow-Headers", "Content-Type");
+	
+	std::vector<std::string> joinProperties;
+	std::string delimiter = "@";
+	properties += "@";
+	size_t pos = 0;
+	std::string token;
+	while ((pos = properties.find(delimiter)) != std::string::npos) {
+		token = properties.substr(0, pos);
+		properties.erase(0, pos + delimiter.length());
+		joinProperties.push_back(token);
+	}
+	furniture::controller::updateJoin(std::stoi(userId), assyName, joiningPart, joinedPart, joinProperties[0], joinProperties[1], joinProperties[2]);
+	response().out() << furniture::controller::getAssyXML(std::stoi(userId), assyName.data());
+
+
+
+}
+
+
+
+/*Cagri END*/

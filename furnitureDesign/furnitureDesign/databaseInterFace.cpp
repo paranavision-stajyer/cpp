@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "databaseInterFace.h"
 #include <boost/functional/hash.hpp>
+
 using namespace furniture;
 const char databaseInterFace::host[] = "localhost";
 const char databaseInterFace::user[] = "root";
@@ -55,7 +56,6 @@ int databaseInterFace::insertPanel(Panel * panel)
 		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
 	}
 }
-
 std::string databaseInterFace::getArrayString(int * arr, int lenght)
 {
 	std::string result = "";
@@ -80,7 +80,6 @@ std::string databaseInterFace::getArrayString(float * arr, int lenght)
 	}
 	return result;
 }
-
 void databaseInterFace::addNewAssyToUser(int userId, std::string assyName)
 {
 	Assembly* assy = new Assembly();
@@ -530,6 +529,7 @@ void databaseInterFace::updatePanel(int panelId, Panel * panel){
 		/* Connect to the MySQL test database */
 		con->setSchema(db);
 		prep_stmt = con->prepareStatement("UPDATE panels SET `width`=?, `height`=?, `thickness`=?, `stripThickness`=?, `material`=?, `stripes`=?, `direction`=? WHERE `idPanel`=?;");
+		
 		//set variable
 		prep_stmt->setDouble(1, panel->getWidth());
 		prep_stmt->setDouble(2, panel->getHeight());
@@ -539,7 +539,6 @@ void databaseInterFace::updatePanel(int panelId, Panel * panel){
 		prep_stmt->setString(6, panel->getStripesString());
 		prep_stmt->setInt(7, panel->direction);
 		prep_stmt->setInt(8, panel->getId());
-
 
 		//insert//
 		prep_stmt->execute();
@@ -636,7 +635,7 @@ void databaseInterFace::deletePanel(int panelId){
 }
 void databaseInterFace::addJoin(int joiningPanelId, int joinedPanelId, int * joiningFaces, int * joinedFaces, float * distances){
 	try {
-		databaseInterFace::deleteJoin(joiningPanelId, joinedPanelId);
+		//databaseInterFace::deleteJoin(joiningPanelId, joinedPanelId);
 		sql::Driver *driver;
 		sql::Connection *con;
 		sql::PreparedStatement  *prep_stmt;
@@ -669,6 +668,45 @@ void databaseInterFace::addJoin(int joiningPanelId, int joinedPanelId, int * joi
 		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
 	}
 }
+/*Cagri*/
+void databaseInterFace::updateJoin(int joiningPanelId, int joinedPanelId, int * joiningFaces, int * joinedFaces, float * distances)
+{
+	try
+	{
+		sql::Driver *driver;
+		sql::Connection *con;
+		sql::PreparedStatement  *prep_stmt;
+		/* Create a connection */
+		driver = get_driver_instance();
+		con = driver->connect(host, user, password);
+		/* Connect to the MySQL test database */
+		con->setSchema(db);
+		prep_stmt = con->prepareStatement("UPDATE Joins set(`joiningPanel`=?, `joinedPanel`=?, `joiningFaces`=?, `joinedFaces`=?, `distances`=?;");
+		prep_stmt->setInt(1, joiningPanelId);
+		prep_stmt->setInt(2, joinedPanelId);
+		prep_stmt->setString(3, databaseInterFace::getArrayString(joiningFaces, 3));
+		prep_stmt->setString(4, databaseInterFace::getArrayString(joinedFaces, 3));
+		prep_stmt->setString(5, databaseInterFace::getArrayString(distances, 3));
+		//insert//
+		prep_stmt->execute();
+		con->commit();
+
+		delete prep_stmt;
+		delete con;
+
+
+	}
+	catch (sql::SQLException &e)
+	{
+		std::cout << "# ERR: SQLException in " << __FILE__;
+		//std::cout << "(" << __FUNCTION__ << ") on line " »
+		//<< __LINE__ << endl;
+		std::cout << "# ERR: " << e.what();
+		std::cout << " (MySQL error code: " << e.getErrorCode();
+		std::cout << ", SQLState: " << e.getSQLState() << " )" << std::endl;
+	}
+}
+/*Cagri - END*/
 void databaseInterFace::deleteJoin(int joiningPanelId, int joinedPanelId){
 	try {
 		sql::Driver *driver;

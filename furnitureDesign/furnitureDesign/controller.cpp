@@ -130,7 +130,40 @@ bool controller::deleteJoin(int userId, std::string assyName, std::string joined
 	databaseInterFace::deleteJoin(joiningpartid, joinedpartid);
 	return true;
 }
+/* Cagri*/
+bool controller::updateJoin( int userId,
+							 std::string assyName,
+							 std::string joiningPart,
+							 std::string joinedPart,
+							 std::string joiningFaces,
+							 std::string joinedFaces,
+						 	 std::string distances){
 
+	int assyid = databaseInterFace::getAssemblyId(userId, assyName);
+	if (assyid == 0)
+		return false;
+	int joiningid = databaseInterFace::getPartId(assyid, joiningPart);
+	if (joiningid == 0)
+
+		return false;
+	int joinedid = databaseInterFace::getPartId(assyid, joinedPart);
+	if (joinedid == 0)
+		return false;
+	if (joiningid /*Eskiden*/==/*!= */ joinedid) {
+		int* joiningFacesarr = new int[3];
+		int* joinedFacesarr = new int[3];
+		float* distancesarr = new float[3];
+		databaseInterFace::getIntArrayFromString(joiningFaces, joiningFacesarr);
+		databaseInterFace::getIntArrayFromString(joinedFaces, joinedFacesarr);
+		databaseInterFace::getFloatArrayFromString(distances, distancesarr);
+		databaseInterFace::updateJoin(joiningid, joinedid, joiningFacesarr, joinedFacesarr, distancesarr);
+		delete[] joinedFacesarr;
+		delete[] joiningFacesarr;
+		delete[] distancesarr;
+		return true;
+	}
+}
+/*Cagri ENd*/
 
 void controller::deleteAssy(int userId, std::string assyName)
 {

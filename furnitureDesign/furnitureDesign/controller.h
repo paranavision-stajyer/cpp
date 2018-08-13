@@ -14,5 +14,12 @@ namespace furniture
 		static bool addPart(int userId, std::string assyName, std::string partName);
 		static bool addJoin(int userId, std::string assyName, std::string joiningPart, std::string joinedPart, std::string joiningFaces, std::string joinedFaces, std::string distances);		
 		static bool deleteJoin(int userId, std::string assyName, std::string joinedPanel, std::string joiningPanel);
+		static bool updateJoin(int userId,
+						std::string assyName,
+						std::string joiningPart,
+						std::string joinedPart,
+						std::string joiningFaces,
+						std::string joinedFaces,
+						std::string distances);
 	};
 }

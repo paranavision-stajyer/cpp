@@ -45,6 +45,9 @@ public:
 		dispatcher().assign("/deleteJoin/(\\d+)/(.*)/(.*)/(.*)", &cppcmsService::deleteJoin, this, 1, 2, 3, 4);
 		mapper().assign("deleteJoin", "/deleteJoin/{1}/{2}/{3}/{4}");
 
+		dispatcher().assign("/updateJoin/(\\d+)/(.*)/(.*)/(.*)/(.*)", &cppcmsService::updateJoin, this, 1, 2, 3, 4, 5);
+		mapper().assign("updateJoin", "/addJoin/{1}/{2}/{3}/{4}/{5}");
+
 		dispatcher().assign("", &cppcmsService::main, this);
 		mapper().assign( "" );
 
@@ -73,5 +76,7 @@ public:
 	void addJoin(std::string userId, std::string assyName, std::string joiningPart, std::string joinedPart, std::string properties);
 
 	void deleteJoin(std::string userId, std::string assyName, std::string joiningPart, std::string joinedPart);
+	
+	void updateJoin(std::string userId, std::string assyName, std::string joiningPart, std::string joinedPart, std::string properties);
 };
 
