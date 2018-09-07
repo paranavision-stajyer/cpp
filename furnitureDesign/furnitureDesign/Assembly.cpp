@@ -1,3 +1,5 @@
+//#include <iostream>
+//#include <fstream>
 #include "stdafx.h"
 #include "Assembly.h"
 #include "tinyxml2.h"
@@ -39,6 +41,33 @@ std::string Assembly::getXML()
 		panel->SetAttribute("stripThickness", std::to_string(p->getStripThickness()).data());
 		panel->SetAttribute("direction", std::to_string(p->direction).data());
 
+		if (p->join != NULL && p->getDistances()!=NULL)
+		{
+			
+			XMLElement* join = doc.NewElement("join");
+			std::string str = "";
+			for (int c = 0; c < 3; ++c)
+			{
+				str += std::to_string(p->join->distances[c]) + "*";
+			}
+			join->SetAttribute("distances", str.data());
+			str = "";
+			for (int c = 0; c < 3; ++c)
+			{
+				str += std::to_string(p->join->joinedFaces[c]) + "*";
+			}
+			join->SetAttribute("joinedFaces", str.data());
+			str = "";
+			for (int c = 0; c < 3; ++c)
+			{
+				str += std::to_string(p->join->joiningFaces[c]) + "*";
+		    }
+			join->SetAttribute("joiningFaces", str.data());
+
+			join->SetAttribute("joiningPanel", p->join->joiningPanel->panelName.data());
+			panel->InsertEndChild(join);
+			std::cout << p->join->joiningPanel->panelName << std::endl;
+		}
 		//transform information//
 		XMLElement* tr = doc.NewElement("tr");
 		glm::mat4 transformMatrix = this->getTransformMatrix(p);
@@ -55,12 +84,25 @@ std::string Assembly::getXML()
 		for(int c=0;c<4;++c)
 			for (int r = 0; r < 4; ++r)
 			{
-				values += std::to_string(pSource[r*4+c]) + "*";
+				values += std::to_string(pSource[r * 4 + c]) + "*";
 			}
 		tr->SetAttribute("values", values.data());
 		panel->InsertEndChild(tr);
 		root->InsertEndChild(panel);
 	}
+
+	//void Assembly::RemovePanel(Panel * panel) {
+	//	int i = 0;
+	//	for (Panel* p : panels) {
+	//		if (p == panel)
+	//		{
+	//			panels.erase(panels.begin() + i);
+	//			break;
+	//		}
+	//		++i;
+	//	}
+	//}
+
 	// Declare a printer    
 	XMLPrinter printer;
 
